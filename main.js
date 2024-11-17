@@ -61,3 +61,8 @@ class Comment {
 // Example usage
 const user1 = new User("datTruong606", { age: "36" });
 const user2 = new User("josephheintz", { hobby: "cooking" });
+
+user1.addConnection("follows", user2);
+const post = user1.createPost("Hello World!");
+user2.viewPost(post);
+user2.commentOnPost(post, "Nice post!");
