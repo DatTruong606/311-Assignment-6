@@ -1,5 +1,5 @@
 class User {
-    construtor(username, attributes = {}) {
+    constructor(username, attributes = {}) {
         this.username = username;
         this.attributes = attributes;
         this.connections = [];
@@ -14,7 +14,7 @@ class User {
 
     createPost(content, date = new Date()) {
         const post = new Post(this, content, date);
-        this.post.push(post);
+        this.posts.push(post);
         return post;
     }
 
@@ -58,5 +58,11 @@ class Comment {
     }
 }
 
-const user1 = new User("datTruong606", { age: "36"});
-const user2 = new User("josephheintz", { hobby: "cooking"});
+// Example usage
+const user1 = new User("datTruong606", { age: "36" });
+const user2 = new User("josephheintz", { hobby: "cooking" });
+
+user1.addConnection("follows", user2);
+const post = user1.createPost("Hello World!");
+user2.viewPost(post);
+user2.commentOnPost(post, "Nice post!");
