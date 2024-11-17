@@ -8,7 +8,7 @@ class User {
       this.readPosts = []; // Posts read by this user
       this.comments = []; // Comments authored by this user
     }
-  
+
     addConnection(type, user) {
       const name = user.username;
       this.connections.push({ type, name});
@@ -56,9 +56,9 @@ class User {
   // Comment class
   class Comment {
     constructor(author, content, creationDate = new Date()) {
-      this.author = author; // The user who created the comment
-      this.content = content; // Text content of the comment
-      this.creationDate = creationDate; // Date of comment creation
+    this.author = author; // The user who created the comment
+    this.content = content; // Text content of the comment
+    this.creationDate = creationDate; // Date of comment creation
     }
   }
   
