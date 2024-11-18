@@ -256,6 +256,7 @@ const filteredPosts = filterPosts([user1, user2, user3], filters);
 console.log(filteredPosts);
 const wordFrequencyData = countWordFrequency(filteredPosts);
 console.log(wordFrequencyData);
+generateTrendingReport([user1, user2, user3, user4, user5, user6], filters);
 
 //Render the wordCloud
 renderWordCloud(wordFrequencyData);
