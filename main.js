@@ -251,7 +251,5 @@ if (typeof document !== 'undefined') {
     // Initial Render
     renderWordCloud(window.wordFrequencyData);
 
-    // Re-render on window resize
-    window.addEventListener("resize", () => renderWordCloud(window.wordFrequencyData));
   });
 }
