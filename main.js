@@ -156,12 +156,12 @@ const post2 = user1.createPost("Nature teaches us so much about life and beauty.
 const post3 = user2.createPost("Programming is an art and a science. I love Python.");
 const post4 = user2.createPost("Functional programming and TypeScript make life easier.");
 const post5 = user3.createPost("Gardening is my therapy. It's relaxing and productive.");
-const post6 = user3.createPost("Coding challenges are my favorite pastime.");
+const post6 = user3.createPost("Coding challenges are my favorite pastime .");
 const post7 = user4.createPost("Machine learning is fascinating. AI will change the world.");
 const post8 = user4.createPost("Blockchain technology is revolutionary but still misunderstood.");
 const post9 = user5.createPost("Surfing in Australia is the best experience ever.");
 const post10 = user5.createPost("JavaScript is the most versatile language.");
-const post11 = user6.createPost("Traveling across Europe is my dream.");
+const post11 = user6.createPost("Traveling across Europe is my dream. ");
 const post12 = user6.createPost("React and Angular are fantastic for building user interfaces.");
 const post13 = user1.createPost("Adventure sports push me to my limits.");
 const post14 = user2.createPost("Learning new programming languages is always rewarding.");
@@ -173,6 +173,7 @@ const post19 = user2.createPost("How do you prefer your coffee? I love mine stro
 const post20 = user1.createPost("Meditation helps calm the mind and improve focus.");
 const post21 = user3.createPost("Cats or dogs? I love both!");
 const post22 = user1.createPost("hello hello hello hello hello hello hello hello hello hello hello hello hello hello");
+const post23 = user2.createPost("test test test test test test test test test ");
 
 // Testing
 // Filter as needed
@@ -183,8 +184,11 @@ const filters = {
 
 };
 
+//Run through the data
 const filteredPosts = filterPosts([user1, user2, user3], filters);
+console.log(filteredPosts);
 const wordFrequencyData = countWordFrequency(filteredPosts);
+console.log(wordFrequencyData);
 
 //Render the wordCloud
 renderWordCloud(wordFrequencyData);
