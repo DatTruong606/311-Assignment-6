@@ -1,8 +1,8 @@
-// Social Media Data Classes
+
 class User {
   constructor(username, attributes = {}) {
     this.username = username;
-    this.attributes = attributes; // Additional user details
+    this.attributes = attributes; //Additional user details
     this.connections = [];
     this.posts = [];
     this.readPosts = [];
@@ -33,6 +33,7 @@ class User {
   }
 }
 
+// Post class will contain data involving the creator, the string, and the date of creation
 class Post {
   constructor(author, content, creationDate = new Date()) {
     this.author = author;
@@ -42,15 +43,18 @@ class Post {
     this.views = [];
   }
 
+  // Adds a comment class into the comments array of Post
   addComment(comment) {
     this.comments.push(comment);
   }
 
+  // Add who has seen the post and when
   addView(user, date) {
     this.views.push({ user, date });
   }
 }
 
+// Comments include creator, the string, and the creation date
 class Comment {
   constructor(author, content, creationDate = new Date()) {
     this.author = author;
@@ -59,6 +63,85 @@ class Comment {
   }
 }
 
+// Filter posts based on a few criteria
+// Criterias are dependent on the filter object, 'filters'
+// Return: a singular array of posts that passes the filter
+function filterPosts(users, filters) {
+  const { attributes, includeWords, excludeWords } = filters;
+
+  return users
+    .filter(user =>
+      Object.entries(attributes || {}).every( // Converts user's attributes into key value pairs
+        ([key, value]) => user.attributes[key] === value // Checks to see if the user's attributes matches the filter's attribute
+      )
+    )
+    .flatMap(user => user.posts) // Flattens all the post arrays into a singular array
+    .filter(post => { // Filter through each post's content based on includeWords and excludeWords from 'filters'
+      if (includeWords && includeWords.length) { 
+        const includeRegex = new RegExp(includeWords.join("|"), "i"); //Turns the includeWords array into a regex seperated by |. Case insensitive 
+        if (!includeRegex.test(post.content)) return false; //If the post's content does not match, exclude the post.
+      }
+
+      // Same as include words with some differences
+      if (excludeWords && excludeWords.length) {
+        const excludeRegex = new RegExp(excludeWords.join("|"), "i");
+        if (excludeRegex.test(post.content)) return false; // If the post's content does match, exclude the post.
+      }
+
+      return true; // Include the post if it passes the filter
+    });
+}
+
+// Determines the frequency of words in an array of posts
+// Return: an array of key value pairs of the word and its count/frequency
+function countWordFrequency(posts) {
+  const wordCounts = {};
+
+  //Words that we don't want in the word cloud.
+  const stopWords = ["is", "the", "a", "and", "to", "my", "i", "this", "be", "it", "of", "in", "have", "for"]; //Can add more if needed
+
+  posts
+    .map(post => post.content) //Extract the content from post
+    .join(" ") // Join all the contents of the array into a single string
+    .toLowerCase() 
+    .replace(/[^a-z\s]/g, "") // We only want the alphabets, no punctuations etc.
+    .split(/\s+/) // Now we split it into an array of words
+    .forEach(word => {
+      if (!stopWords.includes(word) && word) { // Excludes the stopWords and empty strings
+        wordCounts[word] = (wordCounts[word] || 0) + 1; // Increment that word count. If it hasn't been seen, increment to 1.
+      }
+    });
+
+    return Object.entries(wordCounts)
+    .sort((a, b) => b[1] - a[1]); // Sort by the frequency (count) in descending order
+}
+
+// Uses wordcloud2 packge
+function renderWordCloud(data) {
+  const wordCloudElement = document.getElementById("wordCloud");
+
+  // A lot of these options are copied from the wordcloud2 documention 
+  WordCloud(wordCloudElement, {
+    list: data, // A data frame including word and freq in each column
+    weightFactor: 11, // Adjust word size scaling, found 11 to be a good number
+    fontFamily: "Times, serif",
+    color: "random-dark",
+    backgroundColor: "#f0f0f0",
+    gridSize: 10, //Size of the grid in pixels for marking the availability of the canvas the larger the grid size, the bigger the gap between words.
+    rotateRatio: 0.5, // Probability for the word to rotate. Set the number to 1 to always rotate.
+
+    //The following options adjusts the shape of the cloud map
+    //Only use one or the other.
+  
+    rotationSteps: 2, // Degree of freedom for rotation.
+    // minRotation: 1.5708, //If the word should rotate, the minimum rotation (in rad) the text should rotate.
+    // maxRotation: 4.71239, // If the word should rotate, the maximum rotation (in rad) the text should rotate. Set the two value equal to keep all text in one angle.
+    
+    
+  });
+}
+
+// Test Data
 // Users
 const user1 = new User("john_doe", { age: 30, gender: "Male", region: "USA" });
 const user2 = new User("jane_smith", { age: 25, gender: "Female", region: "UK" });
@@ -91,77 +174,8 @@ const post20 = user1.createPost("Meditation helps calm the mind and improve focu
 const post21 = user3.createPost("Cats or dogs? I love both!");
 const post22 = user1.createPost("hello hello hello hello hello hello hello hello hello hello hello hello hello hello");
 
-console.log("Users and posts generated successfully!");
-
-
-// Word Cloud Logic
-function filterPosts(users, filters) {
-  const { attributes, includeWords, excludeWords } = filters;
-
-  return users
-    .filter(user =>
-      Object.entries(attributes || {}).every(
-        ([key, value]) => user.attributes[key] === value
-      )
-    )
-    .flatMap(user => user.posts) // Extract posts
-    .filter(post => {
-      if (includeWords && includeWords.length) {
-        const includeRegex = new RegExp(includeWords.join("|"), "i");
-        if (!includeRegex.test(post.content)) return false;
-      }
-
-      if (excludeWords && excludeWords.length) {
-        const excludeRegex = new RegExp(excludeWords.join("|"), "i");
-        if (excludeRegex.test(post.content)) return false;
-      }
-
-      return true;
-    });
-}
-
-function countWordFrequency(posts) {
-  const wordCounts = {};
-  const stopWords = ["is", "the", "a", "and", "to", "my", "I", "this"]; // Add more as needed
-
-  posts
-    .map(post => post.content)
-    .join(" ")
-    .toLowerCase()
-    .replace(/[^a-z\s]/g, "")
-    .split(/\s+/)
-    .forEach(word => {
-      if (!stopWords.includes(word) && word) {
-        wordCounts[word] = (wordCounts[word] || 0) + 1;
-      }
-    });
-
-  return Object.entries(wordCounts).map(([word, count]) => [word, count]);
-}
-
-function renderWordCloud(data) {
-  const wordCloudElement = document.getElementById("wordCloud");
-
-  // Set dynamic size with a minimum size
-  const width = Math.max(window.innerWidth * 0.8, 600); // Minimum width of 600px
-  const height = Math.max(window.innerHeight * 0.6, 400); // Minimum height of 400px
-
-  wordCloudElement.style.width = `${width}px`;
-  wordCloudElement.style.height = `${height}px`;
-
-  WordCloud(wordCloudElement, {
-    list: data,
-    gridSize: Math.round(16 * (width / 1024)), // Scale gridSize based on width
-    weightFactor: 10, // Adjust word size scaling
-    fontFamily: "Times, serif",
-    color: "random-dark",
-    backgroundColor: "#f0f0f0",
-    rotateRatio: 0.5, // Allow some rotation
-    rotationSteps: 2, // Angle of rotation
-  });
-}
-
-// Example Usage
+// Testing
+// Filter as needed
 const filters = {
   attributes: {},
   includeWords: [],
@@ -172,8 +186,5 @@ const filters = {
 const filteredPosts = filterPosts([user1, user2, user3], filters);
 const wordFrequencyData = countWordFrequency(filteredPosts);
 
-// Initial Render
+//Render the wordCloud
 renderWordCloud(wordFrequencyData);
-
-// Re-render on window resize
-window.addEventListener("resize", () => renderWordCloud(wordFrequencyData));
