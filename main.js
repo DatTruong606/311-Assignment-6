@@ -116,6 +116,41 @@ function countWordFrequency(posts) {
     .sort((a, b) => b[1] - a[1]); // Sort by the frequency (count) in descending order
 }
 
+function generateTrendingReport(users, filters) {
+  // Filter posts based on the provided filters
+  const filteredPosts = filterPosts(users, filters);
+
+  // Calculate trending score based on views over time
+  function calculateTrendingScore(post) {
+    const currentTime = new Date();
+    const timeDiff = (currentTime - new Date(post.creationDate)) / (1000 * 60 * 60 * 24); // in days
+    return (post.views.length * 1000) / timeDiff; // Scale up by 100
+  }
+
+  // Sort posts by trending score
+  const trendingPosts = filteredPosts.sort((a, b) => calculateTrendingScore(b) - calculateTrendingScore(a));
+
+  // Generate report
+  const report = trendingPosts.map(post => ({
+    author: post.author.username,
+    content: post.content,
+    views: post.views.length,
+    creationDate: post.creationDate,
+    trendingScore: calculateTrendingScore(post).toFixed(2)
+  }));
+
+  // Format report output
+  console.log("Trending posts:");
+  report.forEach((post, index) => {
+    console.log(`${index + 1}. Author: ${post.author}`);
+    console.log(`   Content: ${post.content}`);
+    console.log(`   Views: ${post.views}`);
+    console.log(`   Creation Date: ${post.creationDate}`);
+    console.log(`   Trending Score: ${post.trendingScore}`);
+    console.log('---');
+  });
+}
+
 // Uses wordcloud2 packge
 function renderWordCloud(data) {
   const wordCloudElement = document.getElementById("wordCloud");
