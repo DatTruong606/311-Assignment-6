@@ -179,7 +179,10 @@ if (typeof document !== 'undefined') {
         // maxRotation: 4.71239, // If the word should rotate, the maximum rotation (in rad) the text should rotate. Set the two value equal to keep all text in one angle.
       });
     }
+  }
+)
 }
+
 
 // Test Data
 // Users
@@ -213,7 +216,7 @@ const post19 = user2.createPost("How do you prefer your coffee? I love mine stro
 const post20 = user1.createPost("Meditation helps calm the mind and improve focus.", new Date('2023-10-20'));
 const post21 = user3.createPost("Cats or dogs? I love both!", new Date('2023-10-21'));
 const post22 = user1.createPost("hello hello hello hello hello hello hello hello hello hello hello hello hello hello", new Date('2023-10-22'));
-const post23 = user2.createPost("test test test test test test test test test ", new Date('2023-10-21');
+const post23 = user2.createPost("test test test test test test test test test ", new Date('2023-10-21'));
 
 // Populate some views for testing
 user1.viewPost(post1);
