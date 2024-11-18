@@ -210,6 +210,38 @@ const post21 = user3.createPost("Cats or dogs? I love both!");
 const post22 = user1.createPost("hello hello hello hello hello hello hello hello hello hello hello hello hello hello");
 const post23 = user2.createPost("test test test test test test test test test ");
 
+// Populate some views for testing
+user1.viewPost(post1);
+user2.viewPost(post1);
+user3.viewPost(post1);
+user1.viewPost(post2);
+user2.viewPost(post2);
+user3.viewPost(post2);
+user1.viewPost(post3);
+user2.viewPost(post3);
+user3.viewPost(post3);
+
+// Additional views for varying trending scores
+user1.viewPost(post4);
+user2.viewPost(post4);
+user1.viewPost(post5);
+user3.viewPost(post5);
+user1.viewPost(post6);
+user2.viewPost(post6);
+user3.viewPost(post6);
+user1.viewPost(post7);
+user2.viewPost(post7);
+user3.viewPost(post7);
+user1.viewPost(post8);
+user2.viewPost(post8);
+user3.viewPost(post8);
+user1.viewPost(post9);
+user2.viewPost(post9);
+user3.viewPost(post9);
+user1.viewPost(post10);
+user2.viewPost(post10);
+user3.viewPost(post10);
+
 // Testing
 // Filter as needed
 const filters = {
